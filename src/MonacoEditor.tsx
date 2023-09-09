@@ -7,7 +7,7 @@ import './style'
 
 const STATUS_BAR_HEIGHT = 20
 
-function fixCode (code: string): string {
+function fixCode(code: string): string {
   // If monaco editor is provided code using \r\n
   // The editor seems to flicker and the language server is spammed by document/didChange events
   // TODO investigate me?
@@ -23,7 +23,7 @@ const keyBindingsManagedOptions: Record<KeyBindingsMode, Set<MonacoEditorOption>
   emacs: new Set<MonacoEditorOption>(['cursorBlinking', 'cursorStyle']),
   classic: null
 }
-function removeKeyBindingsManagedOptions (options: monaco.editor.IEditorOptions, keyBindingsMode: KeyBindingsMode) {
+function removeKeyBindingsManagedOptions(options: monaco.editor.IEditorOptions, keyBindingsMode: KeyBindingsMode) {
   const managedOptions = keyBindingsManagedOptions[keyBindingsMode]
   if (managedOptions == null) {
     return options
@@ -36,13 +36,13 @@ function removeKeyBindingsManagedOptions (options: monaco.editor.IEditorOptions,
 }
 
 const viewStates = new Map<string, monaco.editor.ICodeEditorViewState>()
-export function defaultRestoreViewState (editor: monaco.editor.IStandaloneCodeEditor, model: monaco.editor.ITextModel): void {
+export function defaultRestoreViewState(editor: monaco.editor.IStandaloneCodeEditor, model: monaco.editor.ITextModel): void {
   const viewState = viewStates.get(model.uri.toString())
   if (viewState != null) {
     editor.restoreViewState(viewState)
   }
 }
-export function defaultSaveViewState (editor: monaco.editor.IStandaloneCodeEditor, model: monaco.editor.ITextModel): void {
+export function defaultSaveViewState(editor: monaco.editor.IStandaloneCodeEditor, model: monaco.editor.ITextModel): void {
   const viewState = editor.saveViewState()
   const key = model.uri.toString()
   if (viewState != null) {
@@ -102,7 +102,7 @@ export interface MonacoEditorProps {
   disposeModels?: boolean
 }
 
-function MonacoEditor ({
+function MonacoEditor({
   height: requestedHeight = '100%',
   maxHeight,
   minHeight = 350,
@@ -280,11 +280,10 @@ function MonacoEditor ({
       // It will then produce a desync and this component will overwrite the editor content to sync it back
       // Doing so produces at least 2 issues: the cursor is moved to the beginning of the file by monaco and the undo stack is lost
       // So a solution is to debounce the onChange callback so it's called only once in that case
-      const debouncedOnChange = debounce(onChange, 0)
       const editor = editorRef.current!
       const didChangeModelContentDisposable = editor.onDidChangeModelContent(event => {
         if (!preventTriggerChangeEventRef.current) {
-          debouncedOnChange(editor.getValue(), event)
+          onChange(editor.getValue(), event)
         }
       })
       return () => {
