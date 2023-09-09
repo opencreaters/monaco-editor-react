@@ -31,8 +31,7 @@ addStyle(`
   height: 20px;
   display: flex;
   align-items: center;
-  padding: 3px 8px 3px 8px;
-  font-size: 13px;
+  font-size: 12px;
   font-family: "Courier New", Courier, monospace;
   font-weight: bold;
 }
