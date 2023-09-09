@@ -1,4 +1,4 @@
-export function addStyle (styleString: string): void {
+export function addStyle(styleString: string): void {
   const style = document.createElement('style')
   style.textContent = styleString
   document.head.append(style)
@@ -28,9 +28,10 @@ addStyle(`
 }
 
 .react-monaco-editor-react-status-bar {
-  flex: none;
-  display: none;
-  padding: 3px 8px 0px 8px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  padding: 3px 8px 3px 8px;
   font-size: 13px;
   font-family: "Courier New", Courier, monospace;
   font-weight: bold;

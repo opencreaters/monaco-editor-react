@@ -1,4 +1,4 @@
-import React, { ForwardedRef, forwardRef, ReactElement, useEffect, useMemo, useRef, useState } from 'react'
+import React, { ForwardedRef, forwardRef, ReactElement, useEffect, useMemo, useRef, useState, ReactNode } from 'react'
 import debounce from 'lodash.debounce'
 import { monaco, createEditor, getMonacoLanguage, updateEditorKeybindingsMode, registerEditorOpenHandler } from '@codingame/monaco-editor-wrapper'
 import { IEditorOptions } from 'vscode/service-override/modelEditor'
@@ -100,6 +100,10 @@ export interface MonacoEditorProps {
    * if false, the models will be kept and re-used the next time the same uri is provided
    */
   disposeModels?: boolean
+  /**
+   * if passed status bar will be displayed
+   */
+  statusBar?: ReactNode
 }
 
 function MonacoEditor({
@@ -116,7 +120,8 @@ function MonacoEditor({
   saveViewState = defaultSaveViewState,
   restoreViewState = defaultRestoreViewState,
   onEditorOpenRequest,
-  disposeModels = true
+  disposeModels = true,
+  statusBar
 }: MonacoEditorProps, ref: ForwardedRef<monaco.editor.IStandaloneCodeEditor>): ReactElement {
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor>()
   const modelRef = useRef<monaco.editor.ITextModel>()
@@ -248,6 +253,13 @@ function MonacoEditor({
     editorRef.current!.updateOptions(allOptions)
   }, [allOptions])
 
+  // Update status bar style
+  useEffect(() => {
+    if (statusBarRef.current) {
+      statusBarRef.current.style.display = statusBar ? 'flex' : 'none';
+    }
+  }, [statusBar])
+
   // Keybindings mode
   useEffect(() => {
     const editor = editorRef.current!
@@ -349,9 +361,11 @@ function MonacoEditor({
         <div className='react-monaco-editor-react' ref={containerRef} />
         <div
           className='react-monaco-editor-react-status-bar'
-          ref={statusBarRef}
           style={statusBarStyle}
-        />
+          ref={statusBarRef}
+        >
+          {statusBar}
+        </div>
       </div>
     </div>
   )
