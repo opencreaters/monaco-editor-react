@@ -6,8 +6,7 @@
     "build": "npm run lint && npm run compile",
     "compile": "tsc",
     "lint": "eslint --fix --ext .ts,.tsx src/",
-    "publish": "npm run build && npm version patch && npm publish --access=publish",
-    "version": "npm version --patch"
+    "publish:release": "npm run build && npm version patch && npm publish --access=publish"
   },
   "repository": {
     "type": "git",
