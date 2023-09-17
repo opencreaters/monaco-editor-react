@@ -292,11 +292,11 @@ function MonacoEditor ({
       // It will then produce a desync and this component will overwrite the editor content to sync it back
       // Doing so produces at least 2 issues: the cursor is moved to the beginning of the file by monaco and the undo stack is lost
       // So a solution is to debounce the onChange callback so it's called only once in that case
-      const debouncedOnChange = debounce(onChange, 0)
+      // const debouncedOnChange = debounce(onChange, 0)
       const editor = editorRef.current!
       const didChangeModelContentDisposable = editor.onDidChangeModelContent(event => {
         if (!preventTriggerChangeEventRef.current) {
-          debouncedOnChange(editor.getValue(), event)
+          onChange(editor.getValue(), event)
         }
       })
       return () => {
